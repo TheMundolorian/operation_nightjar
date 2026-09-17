@@ -26,9 +26,11 @@ const togglePasscode = document.querySelector('#toggle-passcode');
 const errorBox = document.querySelector('#auth-error');
 const submitButton = document.querySelector('#submit-button');
 const logoutButton = document.querySelector('#logout-button');
-const documentFrame = document.querySelector('#document-frame');
+const pdfViewer = document.querySelector('#pdf-viewer');
+const openPdf = document.querySelector('#open-pdf');
 const decrypting = document.querySelector('#decrypting');
 let activeDocumentUrl = null;
+let pdfJsPromise = null;
 
 codenameInput.addEventListener('input', () => {
   codenameInput.value = codenameInput.value.toUpperCase();
@@ -54,7 +56,7 @@ form.addEventListener('submit', async (event) => {
   submitButton.textContent = 'VERIFYING...';
   try {
     const pdf = await decryptBriefing(operative.asset, passcodeInput.value);
-    grantAccess(codename, operative, pdf);
+    await grantAccess(codename, operative, pdf);
   } catch {
     await new Promise((resolve) => setTimeout(resolve, 500));
     denyAccess();
@@ -68,8 +70,9 @@ form.addEventListener('submit', async (event) => {
 logoutButton.addEventListener('click', () => {
   if (activeDocumentUrl) URL.revokeObjectURL(activeDocumentUrl);
   activeDocumentUrl = null;
-  documentFrame.removeAttribute('src');
-  documentFrame.hidden = true;
+  openPdf.removeAttribute('href');
+  pdfViewer.replaceChildren();
+  pdfViewer.hidden = true;
   decrypting.hidden = false;
   briefingView.hidden = true;
   logoutButton.hidden = true;
@@ -85,7 +88,7 @@ function denyAccess() {
   passcodeInput.focus();
 }
 
-function grantAccess(codename, operative, pdfBytes) {
+async function grantAccess(codename, operative, pdfBytes) {
   document.querySelector('#operative-name').textContent = codename;
   document.querySelector('#clearance-label').textContent = `ACCESS GRANTED // ${operative.clearance}`;
   document.querySelector('#clearance-band').textContent = operative.clearance;
@@ -97,12 +100,47 @@ function grantAccess(codename, operative, pdfBytes) {
   briefingView.hidden = false;
   logoutButton.hidden = false;
   activeDocumentUrl = URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-  documentFrame.src = `${activeDocumentUrl}#toolbar=0&navpanes=0&view=FitH`;
-  documentFrame.onload = () => {
+  openPdf.href = activeDocumentUrl;
+  pdfViewer.hidden = false;
+  try {
+    await renderPdf(pdfBytes);
     decrypting.hidden = true;
-    documentFrame.hidden = false;
-  };
+  } catch {
+    decrypting.hidden = true;
+    pdfViewer.innerHTML = '<p class="pdf-error">DOCUMENT RENDERER UNAVAILABLE.<br>USE “OPEN PDF” ABOVE TO VIEW THE BRIEF.</p>';
+  }
   window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+async function renderPdf(pdfBytes) {
+  pdfViewer.replaceChildren();
+  pdfJsPromise ??= import('./vendor/pdfjs/pdf.min.mjs');
+  const pdfjs = await pdfJsPromise;
+  pdfjs.GlobalWorkerOptions.workerSrc = new URL('vendor/pdfjs/pdf.worker.min.mjs', document.baseURI).href;
+  const documentTask = pdfjs.getDocument({ data: pdfBytes.slice() });
+  const pdf = await documentTask.promise;
+  const availableWidth = Math.max(280, Math.min(pdfViewer.clientWidth - 16, 900));
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+  for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+    const page = await pdf.getPage(pageNumber);
+    const baseViewport = page.getViewport({ scale: 1 });
+    const cssScale = availableWidth / baseViewport.width;
+    const renderViewport = page.getViewport({ scale: cssScale * pixelRatio });
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.floor(renderViewport.width);
+    canvas.height = Math.floor(renderViewport.height);
+    canvas.style.width = `${Math.floor(baseViewport.width * cssScale)}px`;
+    canvas.style.height = `${Math.floor(baseViewport.height * cssScale)}px`;
+    const figure = document.createElement('figure');
+    figure.className = 'pdf-page';
+    const caption = document.createElement('figcaption');
+    caption.textContent = `PAGE ${pageNumber} // ${pdf.numPages}`;
+    figure.append(canvas, caption);
+    pdfViewer.append(figure);
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport: renderViewport }).promise;
+    page.cleanup();
+  }
 }
 
 async function decryptBriefing(assetUrl, passcode) {
