@@ -4,12 +4,16 @@ const OPERATIVES = {
     clearance: 'NIGHTJAR // VIP',
     assignment: 'Strategic command brief',
     filename: 'OPERATION_NIGHTJAR_VIP_BRIEF.pdf',
+    overview: 'You are the protected VIP for Operation NIGHTJAR, a relaxed family birthday mission beginning at Home Base and the known morning objective at Hooksett Old Home Day. RAVEN and SENTINEL will manage navigation, timing, and all undisclosed follow-on objectives. Your task is to prepare for a mixed indoor and outdoor family day, communicate comfort needs, and follow movement cues.',
+    directive: 'Review the VIP Movement & Readiness Brief below before departure. It contains every time, preparation item, and instruction you are cleared to receive.',
   },
   SENTINEL: {
     asset: 'assets/briefings/sentinel.njar',
     clearance: 'NIGHTJAR // FIELD',
     assignment: 'Tactical field brief',
     filename: 'OPERATION_NIGHTJAR.pdf',
+    overview: 'You are the senior field operator and assistant mission lead for a concealed birthday operation on 19 September 2026. Support RAVEN by protecting surprise integrity, assisting SPARROW, monitoring hard time anchors, documenting the mission, and flagging timing or morale concerns. Flexibility and ORACLE comfort take priority throughout execution.',
+    directive: 'Read the complete Operation Order below before execution. You are responsible for knowing the objectives, movement timeline, contingencies, and mission-success criteria.',
   },
 };
 
@@ -87,6 +91,8 @@ function grantAccess(codename, operative, pdfBytes) {
   document.querySelector('#clearance-band').textContent = operative.clearance;
   document.querySelector('#assignment').textContent = operative.assignment;
   document.querySelector('#document-name').textContent = operative.filename;
+  document.querySelector('#mission-overview').textContent = operative.overview;
+  document.querySelector('#read-directive').textContent = operative.directive;
   loginView.hidden = true;
   briefingView.hidden = false;
   logoutButton.hidden = false;
