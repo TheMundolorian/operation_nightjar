@@ -88,18 +88,17 @@ form .warning { color: #50534d; text-align: center; font-size: 9px; letter-spaci
 .operative-line { margin: 15px 0 0; color: #666962; font-size: 11px; letter-spacing: .17em; }
 .operative-line strong { color: #c4c6c1; }
 .verified { margin: 0; color: var(--green); font-size: 9px; letter-spacing: .18em; display: flex; align-items: center; gap: 9px; }
-.mission-overview { display: grid; grid-template-columns: 62px 1fr; gap: 24px; margin-top: 24px; padding: 24px; border: 1px solid rgba(240,200,90,.3); background: linear-gradient(100deg, rgba(240,200,90,.08), rgba(13,16,15,.88) 42%); }
-.overview-marker { width: 52px; height: 52px; display: grid; place-items: center; border: 1px solid rgba(240,200,90,.45); color: var(--gold); font: 15px/1 Consolas, monospace; letter-spacing: .08em; }
-.mission-overview > div:last-child > p { max-width: 960px; margin: 12px 0 18px; color: #c2c4bf; font-size: 14px; line-height: 1.75; }
-.read-directive { display: flex; align-items: baseline; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); color: #999c95; font-size: 12px; line-height: 1.65; }
-.read-directive strong { flex: 0 0 auto; color: var(--gold); font: 9px/1 Consolas, monospace; letter-spacing: .18em; }
-.briefing-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; margin-top: 24px; }
+.briefing-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; margin-top: 24px; }
 .briefing-grid aside { display: grid; align-content: start; gap: 20px; }
 .intel-card, .protocol-card, .document-panel { border: 1px solid var(--line); background: rgba(13,16,15,.86); }
 .intel-card, .protocol-card { padding: 20px; }
 .intel-card > strong { display: block; margin-top: 10px; color: var(--gold); font: 13px/1.4 Consolas, monospace; letter-spacing: .1em; }
 .intel-card hr { border: 0; border-top: 1px solid var(--line); margin: 20px 0; }
 .intel-card p { color: #c2c4bf; font-size: 14px; line-height: 1.5; }
+.intel-card .overview-copy { margin-bottom: 16px; color: #aeb1aa; font-size: 13px; line-height: 1.7; }
+.read-order { border: 1px solid rgba(240,200,90,.35); background: rgba(240,200,90,.07); padding: 14px; }
+.read-order strong { display: block; margin-bottom: 8px; color: var(--gold); font: 10px/1.3 Consolas, monospace; letter-spacing: .13em; }
+.read-order span { display: block; color: #d2d4cf; font-size: 12px; line-height: 1.6; }
 .protocol-card ul { padding: 0; margin: 16px 0 0; list-style: none; color: #777a74; font-size: 12px; line-height: 1.7; }
 .protocol-card li { padding-left: 15px; position: relative; margin-top: 8px; }
 .protocol-card li::before { content: "›"; position: absolute; left: 0; color: var(--gold); }
@@ -132,8 +131,6 @@ form .warning { color: #50534d; text-align: center; font-size: 9px; letter-spaci
   .briefing-view { padding: 30px 18px; }
   .briefing-titlebar { align-items: start; flex-direction: column; }
   .briefing-grid aside { grid-template-columns: 1fr; }
-  .mission-overview { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
-  .read-directive { align-items: flex-start; flex-direction: column; }
   .document-head { align-items: start; flex-direction: column; }
   #document-frame { min-height: 520px; }
 }
