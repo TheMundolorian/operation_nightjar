@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080a09" />
+    <meta name="description" content="Restricted tactical intelligence portal for authorized NIGHTJAR personnel." />
+    <meta property="og:title" content="Operation NIGHTJAR" />
+    <meta property="og:description" content="Secure Briefing Network" />
+    <meta property="og:image" content="assets/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; frame-src blob:; object-src 'none'; base-uri 'none'; form-action 'self'" />
+    <title>Operation NIGHTJAR | Secure Briefing Network</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="scanlines" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="shield" aria-hidden="true">N</div>
+          <div>
+            <p class="eyebrow">JOINT OPERATIONS DIRECTORATE</p>
+            <p class="network-name">SECURE BRIEFING NETWORK</p>
+          </div>
+        </div>
+        <div class="link-status"><span></span> ENCRYPTED LINK ACTIVE</div>
+        <button id="logout-button" class="logout-button" type="button" hidden>DISCONNECT</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="login-view" class="login-grid">
+        <div class="mission-intro">
+          <div>
+            <p class="classification"><i></i>EYES ONLY // COMPARTMENTED</p>
+            <p class="operation-label">OPERATION</p>
+            <h1>NIGHTJAR</h1>
+            <p class="lede">Tactical intelligence portal. Access is restricted to personnel assigned to the NIGHTJAR compartment.</p>
+          </div>
+          <div class="mission-facts" aria-label="Mission status">
+            <div><small>THEATER</small><strong>REDACTED</strong></div>
+            <div><small>AUTHORITY</small><strong>JOD-7</strong></div>
+            <div><small>WINDOW</small><strong>ACTIVE</strong></div>
+          </div>
+        </div>
+
+        <div class="auth-column">
+          <div class="auth-panel">
+            <div class="panel-head"><span>⌁ &nbsp; IDENTITY CHALLENGE</span><span>NODE 04</span></div>
+            <form id="login-form" novalidate>
+              <div>
+                <h2>Authenticate operative</h2>
+                <p>Enter your assigned codename and access phrase.</p>
+              </div>
+              <label>
+                <span>CODENAME</span>
+                <input id="codename" name="codename" type="text" autocomplete="username" placeholder="ENTER DESIGNATION" spellcheck="false" required />
+              </label>
+              <label>
+                <span>PASSCODE</span>
+                <div class="password-wrap">
+                  <input id="passcode" name="passcode" type="password" autocomplete="current-password" placeholder="••••••••••••" required />
+                  <button id="toggle-passcode" type="button" aria-label="Show passcode">SHOW</button>
+                </div>
+              </label>
+              <div id="auth-error" class="auth-error" role="alert" hidden>△ &nbsp; CLEARANCE DENIED // VERIFY CREDENTIALS</div>
+              <button id="submit-button" class="submit-button" type="submit">REQUEST CLEARANCE</button>
+              <p class="warning">UNAUTHORIZED ACCESS IS LOGGED AND REPORTED</p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="briefing-view" class="briefing-view" hidden>
+        <div class="briefing-titlebar">
+          <div>
+            <p id="clearance-label" class="access-granted">ACCESS GRANTED</p>
+            <h1>NIGHTJAR BRIEF</h1>
+            <p class="operative-line">ASSIGNED OPERATIVE: <strong id="operative-name"></strong></p>
+          </div>
+          <p class="verified"><span></span> SESSION VERIFIED</p>
+        </div>
+
+        <div class="briefing-grid">
+          <aside>
+            <div class="intel-card">
+              <small>CLEARANCE BAND</small>
+              <strong id="clearance-band"></strong>
+              <hr />
+              <small>ASSIGNMENT</small>
+              <p id="assignment"></p>
+            </div>
+            <div class="protocol-card">
+              <small>HANDLING PROTOCOL</small>
+              <ul>
+                <li>Do not reproduce or transmit.</li>
+                <li>Maintain visual control.</li>
+                <li>Disconnect after review.</li>
+              </ul>
+            </div>
+          </aside>
+
+          <article class="document-panel">
+            <div class="document-head">
+              <div>
+                <p id="document-name"></p>
+                <small>ENCRYPTED DOCUMENT // VIEW ONLY</small>
+              </div>
+              <span>AUTHORIZED COPY 01</span>
+            </div>
+            <div id="decrypting" class="decrypting">
+              <div class="loader"></div>
+              <p>DECRYPTING ASSIGNED PACKAGE</p>
+            </div>
+            <iframe id="document-frame" title="Assigned mission briefing" hidden></iframe>
+          </article>
+        </div>
+      </section>
+    </main>
+    <script src="app.js" defer></script>
+  </body>
+</html>
